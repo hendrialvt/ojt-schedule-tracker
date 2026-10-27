@@ -87,29 +87,40 @@
           </div>
         </div>
 
-        <!-- Mode Toggle & Quick Comparator Trigger -->
-        <div class="flex items-center gap-2.5">
+        <!-- Quick Actions (Copy Summary, Print, Reset) -->
+        <div class="flex items-center gap-2">
           <button 
-            id="openComparatorBtn"
-            onclick="scrollToComparator()" 
-            class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-brand-50 text-brand-700 border border-brand-200 hover:bg-brand-100 hover:border-brand-300 transition shadow-2xs"
+            id="copySummaryBtn"
+            onclick="copyCurrentScheduleSummary()" 
+            class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition shadow-2xs"
+            title="Copy current schedule as formatted text"
           >
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+            <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>
             </svg>
-            <span>Compare 2 People</span>
+            <span id="copyBtnText">Copy Schedule</span>
           </button>
-          
+
           <button 
-            onclick="resetAllFilters()" 
-            class="px-3 py-2 rounded-xl text-xs sm:text-sm font-medium text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition"
+            onclick="window.print()" 
+            class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition shadow-2xs"
+            title="Print or save as PDF"
           >
-            Reset
+            <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+            </svg>
+            <span>Print</span>
           </button>
         </div>
       </div>
     </div>
   </header>
+
+  <!-- Notification Toast for Copy -->
+  <div id="toastMessage" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 ease-out bg-slate-900 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-lg border border-slate-700 flex items-center gap-2 pointer-events-none">
+    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+    <span id="toastText">Schedule copied to clipboard!</span>
+  </div>
 
   <!-- Main Container -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-7 flex-1 w-full space-y-8">
@@ -135,7 +146,7 @@
                 </span>
               </div>
               <p class="text-xs sm:text-sm text-slate-500 mt-1" id="spotlightSubtext">
-                Explore chronological rotations, location milestones, and discover who will be sharing your department desk on each date.
+                Chronological OJT path with exact date ranges, branch periods, and live teammate detection.
               </p>
             </div>
           </div>
@@ -143,7 +154,7 @@
           <!-- Fast Selector Dropdown -->
           <div class="w-full lg:w-80 shrink-0">
             <label for="personDropdown" class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">
-              Select Another Participant:
+              Switch Participant:
             </label>
             <div class="relative">
               <select 
@@ -164,14 +175,14 @@
 
       <!-- Rotation Metrics & Timeline Summary -->
       <div class="p-5 sm:p-7">
-        <div class="flex items-center justify-between mb-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
           <div>
-            <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400">Chronological Rotations & Co-Workers</h3>
-            <p class="text-xs text-slate-500">Every period shows exact dates, duration, location, and matching coworkers.</p>
+            <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400">Step-by-Step Rotations & Desk Partners</h3>
+            <p class="text-xs text-slate-500">Click on any teammate's tag to quickly view their respective rotation schedule.</p>
           </div>
           <div class="flex items-center gap-2 text-xs">
             <span class="inline-flex items-center gap-1.5 text-emerald-700 font-semibold bg-emerald-50 px-2 py-1 rounded-md border border-emerald-200">
-              <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Exact Match
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Identical Dates
             </span>
             <span class="inline-flex items-center gap-1.5 text-amber-700 font-semibold bg-amber-50 px-2 py-1 rounded-md border border-amber-200">
               <span class="w-2 h-2 rounded-full bg-amber-500"></span> Overlapping Dates
@@ -186,46 +197,12 @@
       </div>
     </section>
 
-    <!-- SECTION 2: MUTUAL SCHEDULE COMPARATOR -->
-    <section id="comparatorSection" class="bg-white rounded-3xl border border-slate-200 shadow-xs p-5 sm:p-7 space-y-6">
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-slate-100">
-        <div>
-          <div class="inline-flex items-center gap-1.5 text-xs font-bold text-brand-700 bg-brand-50 px-2.5 py-1 rounded-full border border-brand-200 uppercase tracking-wide mb-1">
-            <span>🤝 Mutual Schedule Comparator</span>
-          </div>
-          <h2 class="text-xl font-bold text-slate-900 tracking-tight">Do We Cross Paths?</h2>
-          <p class="text-xs sm:text-sm text-slate-500">Select any two participants to instantly identify every shared division, identical dates, or overlapping intervals.</p>
-        </div>
-
-        <!-- Selectors for A and B -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full md:w-auto">
-          <div>
-            <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1">Person A</label>
-            <select id="comparePersonA" onchange="runComparator()" class="w-full sm:w-56 bg-slate-50 border border-slate-200 text-xs font-semibold rounded-xl p-2.5 focus:ring-2 focus:ring-brand-500 text-slate-800">
-              <!-- Populated by JS -->
-            </select>
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1">Person B</label>
-            <select id="comparePersonB" onchange="runComparator()" class="w-full sm:w-56 bg-slate-50 border border-slate-200 text-xs font-semibold rounded-xl p-2.5 focus:ring-2 focus:ring-brand-500 text-slate-800">
-              <!-- Populated by JS -->
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <!-- Comparison Result Container -->
-      <div id="comparatorResults">
-        <!-- Rendered by JS -->
-      </div>
-    </section>
-
-    <!-- SECTION 3: COMPLETE DIRECTORY OF ALL 14 PARTICIPANTS -->
+    <!-- SECTION: COMPLETE DIRECTORY OF ALL 14 PARTICIPANTS -->
     <section class="space-y-4">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h2 class="text-xl font-bold text-slate-900 tracking-tight">All Participants Directory</h2>
-          <p class="text-xs sm:text-sm text-slate-500">Filter by stream or type a name/NIK to explore anyone's assignments and partner circle.</p>
+          <p class="text-xs sm:text-sm text-slate-500">Select any candidate to instantly view their rotation roadmap and companions.</p>
         </div>
 
         <!-- Search & Filter Controls -->
@@ -263,7 +240,7 @@
   </main>
 
   <!-- Footer -->
-  <footer class="bg-white border-t border-slate-200 py-6 mt-12">
+  <footer class="bg-white border-t border-slate-200 py-6 mt-12 print:hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-2">
       <p>Talent Development Program Batch V Year 2026 • Head Office & Branch OJT Schedule Explorer</p>
       <p class="font-mono text-[11px] text-slate-400">Branch Schedule: Nov 30 – Dec 11, 2026</p>
@@ -597,41 +574,166 @@
     document.addEventListener("DOMContentLoaded", () => {
       buildDropdowns();
       selectPerson(currentSelectedPersonId);
-      initComparatorDefaults();
       renderDirectory();
     });
 
     function buildDropdowns() {
       const spotlightSelect = document.getElementById("personDropdown");
-      const compA = document.getElementById("comparePersonA");
-      const compB = document.getElementById("comparePersonB");
-
       spotlightSelect.innerHTML = "";
-      compA.innerHTML = "";
-      compB.innerHTML = "";
 
-      ALL_PARTICIPANTS.forEach((p, idx) => {
+      ALL_PARTICIPANTS.forEach((p) => {
         const optionStr = `${p.name} (${p.stream})`;
-        
-        const opt1 = new Option(optionStr, p.id);
-        spotlightSelect.add(opt1);
-
-        const optA = new Option(optionStr, p.id);
-        const optB = new Option(optionStr, p.id);
-        compA.add(optA);
-        compB.add(optB);
+        const opt = new Option(optionStr, p.id);
+        spotlightSelect.add(opt);
       });
     }
 
-    function initComparatorDefaults() {
-      // Default Person A = Mikhael Prausdian, Person B = Hendriawan Alfitodinova (Strong IT pairing example)
-      document.getElementById("comparePersonA").value = "it-2";
-      document.getElementById("comparePersonB").value = "it-3";
-      runComparator();
+    /* -------------------------------------------------------------------------
+       COPY SCHEDULE SUMMARY
+    ------------------------------------------------------------------------- */
+    function showToast(message) {
+      const toast = document.getElementById("toastMessage");
+      const toastText = document.getElementById("toastText");
+      toastText.textContent = message;
+      toast.classList.remove("translate-y-20", "opacity-0");
+      setTimeout(() => {
+        toast.classList.add("translate-y-20", "opacity-0");
+      }, 2500);
+    }
+
+    function copyCurrentScheduleSummary() {
+      const person = ALL_PARTICIPANTS.find(p => p.id === currentSelectedPersonId);
+      if (!person) return;
+
+      let text = `OJT Schedule - ${person.name} (${person.stream} Track | NIK: ${person.nik})\n`;
+      text += `Batch V Year 2026\n`;
+      text += `--------------------------------------------------\n`;
+      person.rotations.forEach((r, idx) => {
+        const teammates = getTeammatesForRotation(person.id, r);
+        const teammateNames = teammates.length > 0 
+          ? teammates.map(t => `${t.person.name} [${t.dates}]`).join(', ')
+          : 'Solo Rotation';
+        text += `${idx + 1}. ${r.dates} | ${r.division} (${r.location})\n   With: ${teammateNames}\n`;
+      });
+      text += `--------------------------------------------------\n`;
+
+      const dummy = document.createElement("textarea");
+      dummy.value = text;
+      document.body.appendChild(dummy);
+      dummy.select();
+      document.execCommand("copy");
+      document.body.removeChild(dummy);
+
+      showToast(`Copied ${person.name}'s schedule!`);
     }
 
     /* -------------------------------------------------------------------------
        SPOTLIGHT: BY PERSON / PARTNERS VIEW
+    ------------------------------------------------------------------------- */
+    function selectPerson(personId) {
+      currentSelectedPersonId = personId;
+      document.getElementById("personDropdown").value = personId;
+
+      const person = ALL_PARTICIPANTS.find(p => p.id === personId);
+      if (!person) return;
+
+      // Update Hero Card
+      const avatar = document.getElementById("spotlightAvatar");
+      avatar.textContent = person.initials;
+      avatar.className = `w-14 h-14 rounded-2xl ${person.stream === 'IT' ? 'bg-indigo-600' : 'bg-emerald-600'} text-white font-bold text-lg flex items-center justify-center shadow-md shadow-brand-500/20 shrink-0 ring-4 ring-white`;
+
+      document.getElementById("spotlightName").textContent = person.name;
+      
+      const trackBadge = document.getElementById("spotlightTrackBadge");
+      trackBadge.textContent = `${person.stream} Stream Track`;
+      trackBadge.className = `px-2.5 py-0.5 rounded-full text-xs font-bold ${person.stream === 'IT' ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' : 'bg-emerald-50 text-emerald-700 border border-emerald-200'}`;
+
+      document.getElementById("spotlightNikBadge").textContent = `NIK: ${person.nik}`;
+
+      // Render Chronological Timeline
+      const container = document.getElementById("spotlightTimelineContainer");
+      container.innerHTML = "";
+
+      person.rotations.forEach((rot, idx) => {
+        const cfg = DIVISION_CONFIG[rot.division] || { color: "slate", icon: "📌", badge: "bg-slate-100 text-slate-700 border-slate-200" };
+        const teammates = getTeammatesForRotation(person.id, rot);
+
+        const timelineItem = document.createElement("div");
+        timelineItem.className = "relative bg-white rounded-2xl border border-slate-200 shadow-2xs hover:shadow-md transition p-4 sm:p-5";
+
+        // Dot indicator
+        const dot = document.createElement("div");
+        dot.className = `absolute -left-[41px] top-6 w-5 h-5 rounded-full border-4 border-white shadow-sm ${rot.location === 'Branches' ? 'bg-emerald-500 ring-2 ring-emerald-200' : 'bg-indigo-600 ring-2 ring-indigo-200'}`;
+        timelineItem.appendChild(dot);
+
+        // Teammates badges HTML
+        let teammatesHtml = "";
+        if (teammates.length > 0) {
+          const badges = teammates.map(t => {
+            const isExact = t.exact;
+            return `
+              <button 
+                onclick="selectPerson('${t.person.id}'); window.scrollTo({top: 0, behavior: 'smooth'});"
+                title="Click to spotlight ${t.person.name}'s schedule"
+                class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-semibold transition ${isExact ? 'bg-emerald-50 text-emerald-800 border border-emerald-300 hover:bg-emerald-100 hover:border-emerald-400' : 'bg-amber-50 text-amber-800 border border-amber-300 hover:bg-amber-100 hover:border-amber-400'}"
+              >
+                <span class="w-1.5 h-1.5 rounded-full ${isExact ? 'bg-emerald-500' : 'bg-amber-500'}"></span>
+                <span>${t.person.name}</span>
+                <span class="font-mono text-[10px] text-slate-500">(${t.dates})</span>
+              </button>
+            `;
+          }).join("");
+
+          teammatesHtml = `
+            <div class="mt-3.5 pt-3 border-t border-slate-100">
+              <div class="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-2">
+                <svg class="w-3.5 h-3.5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                <span>Who is with you (${teammates.length} coworker${teammates.length > 1 ? 's' : ''}):</span>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                ${badges}
+              </div>
+            </div>
+          `;
+        } else {
+          teammatesHtml = `
+            <div class="mt-3 pt-3 border-t border-slate-100 text-xs text-slate-400 flex items-center gap-1.5 font-medium">
+              <span class="inline-block w-2 h-2 rounded-full bg-slate-300"></span>
+              <span>Solo Rotation (No other TDP participants assigned to this division during these dates)</span>
+            </div>
+          `;
+        }
+
+        timelineItem.innerHTML += `
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div class="flex items-center space-x-2.5">
+              <span class="text-xl sm:text-2xl">${cfg.icon}</span>
+              <div>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Rotation ${idx + 1} of ${person.rotations.length}</span>
+                <h4 class="font-bold text-slate-900 text-base sm:text-lg">${rot.division}</h4>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2 self-start sm:self-auto">
+              <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-slate-900 text-white shadow-2xs">
+                📅 ${rot.dates}
+              </span>
+              <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-bold ${rot.location === 'Branches' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-slate-100 text-slate-600 border border-slate-200'}">
+                ${rot.location}
+              </span>
+            </div>
+          </div>
+          ${teammatesHtml}
+        `;
+
+        container.appendChild(timelineItem);
+      });
+
+      renderDirectory();
+    }
+
+    /* -------------------------------------------------------------------------
+       DIRECTORY OF ALL 14 PARTICIPANTS
     ------------------------------------------------------------------------- */
     function selectPerson(personId) {
       currentSelectedPersonId = personId;
@@ -950,7 +1052,6 @@
 
     function resetAllFilters() {
       selectPerson("it-1");
-      initComparatorDefaults();
       clearDirectorySearch();
       setDirectoryFilter("all");
       window.scrollTo({ top: 0, behavior: 'smooth' });
