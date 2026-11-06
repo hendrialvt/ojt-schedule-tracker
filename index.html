@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OJT Schedule: Person & Teammate Explorer | TDP Batch V 2026</title>
+  <title>OJT Schedule | TDP Batch V 2026</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -69,36 +69,61 @@
               <span class="text-[11px] font-bold tracking-wide uppercase px-2 py-0.5 rounded-md bg-brand-50 text-brand-700 border border-brand-200">
                 TDP Batch V Year 2026
               </span>
-              <span class="text-xs text-slate-400 font-medium">Head Office & Branch OJT</span>
+              <span class="text-xs text-slate-400 font-medium">Head Office OJT</span>
             </div>
             <h1 class="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight">OJT Person & Teammate Explorer</h1>
           </div>
         </div>
 
-        <!-- Quick Actions (Copy Schedule, Print) -->
-        <div class="flex items-center gap-2">
-          <button 
-            id="copySummaryBtn"
-            onclick="copyCurrentScheduleSummary()" 
-            class="cursor-pointer inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition shadow-2xs"
-            title="Copy current schedule as formatted text"
-          >
-            <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>
-            </svg>
-            <span id="copyBtnText">Copy Schedule</span>
-          </button>
+        <!-- Primary View Switcher & Actions -->
+        <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+          <!-- View Navigation Tabs -->
+          <div class="inline-flex bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-semibold select-none shadow-2xs" role="tablist">
+            <button 
+              type="button" 
+              id="viewTabPerson" 
+              onclick="switchPrimaryView('person')" 
+              class="cursor-pointer px-3.5 py-1.5 rounded-lg bg-white text-slate-900 shadow-xs font-bold border border-slate-200/60 transition flex items-center gap-1.5"
+            >
+              <svg class="w-3.5 h-3.5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+              <span>By Person</span>
+            </button>
+            <button 
+              type="button" 
+              id="viewTabMatrix" 
+              onclick="switchPrimaryView('matrix')" 
+              class="cursor-pointer px-3.5 py-1.5 rounded-lg text-slate-500 hover:text-slate-900 font-medium transition flex items-center gap-1.5"
+            >
+              <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              <span>Schedule Matrix (Division × Date)</span>
+            </button>
+          </div>
 
-          <button 
-            onclick="window.print()" 
-            class="cursor-pointer hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition shadow-2xs"
-            title="Print or save as PDF"
-          >
-            <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
-            </svg>
-            <span>Print</span>
-          </button>
+          <!-- Quick Actions (Copy Schedule, Print) -->
+          <div class="flex items-center gap-2">
+            <button 
+              id="copySummaryBtn"
+              onclick="copyCurrentScheduleSummary()" 
+              class="cursor-pointer inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition shadow-2xs"
+              title="Copy current schedule as formatted text"
+            >
+              <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>
+              </svg>
+              <span id="copyBtnText">Copy Schedule</span>
+            </button>
+
+            <button 
+              onclick="window.print()" 
+              class="cursor-pointer hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition shadow-2xs"
+              title="Print or save as PDF"
+            >
+              <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+              </svg>
+              <span>Print</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -133,11 +158,12 @@
   <!-- Main Container -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-7 flex-1 w-full space-y-8">
 
-    <!-- Active Profile Spotlight Banner -->
-    <section class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
-      <div class="p-5 sm:p-7 border-b border-slate-100 bg-gradient-to-r from-slate-50 via-white to-indigo-50/40">
-        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-          
+    <!-- VIEW 1: BY PERSON & PARTNERS (Default) -->
+    <div id="personViewWrapper" class="space-y-8">
+      <!-- Active Profile Spotlight Banner -->
+      <section class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
+        
+        <div class="p-5 sm:p-7 border-b border-slate-100 flex flex-col lg:flex-row lg:items-center justify-between gap-6 bg-slate-50/50">
           <!-- Selected Person Hero Details -->
           <div class="flex items-start sm:items-center space-x-4">
             <div id="spotlightAvatarWrapper" class="shrink-0">
@@ -178,9 +204,7 @@
               </div>
             </div>
           </div>
-
         </div>
-      </div>
 
       <!-- Rotation Metrics & Timeline Summary -->
       <div class="p-5 sm:p-7">
@@ -207,16 +231,12 @@
     </section>
 
     <!-- SECTION: COMPLETE DIRECTORY OF ALL 14 PARTICIPANTS -->
-    <section class="space-y-4">
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h2 class="text-xl font-bold text-slate-900 tracking-tight">Participant Directory</h2>
-          <p class="text-xs sm:text-sm text-slate-500">Select any candidate to view their complete rotation itinerary and assigned peers.</p>
-        </div>
-
-        <!-- Search & Filter Controls -->
+    <section>
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+        <h3 class="text-lg font-extrabold text-slate-900 tracking-tight">Full Cohort Directory</h3>
+        
         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-          <!-- Live Search Input -->
+          <!-- Directory Search -->
           <div class="relative w-full sm:w-64">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
@@ -224,56 +244,121 @@
             <input 
               type="text" 
               id="directorySearchInput" 
-              placeholder="Search name, NIK, or division..." 
+              placeholder="Search by name, NIK..." 
               oninput="handleDirectorySearch(this.value)"
               class="w-full pl-9 pr-8 py-2 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition shadow-2xs"
             >
             <button id="clearDirSearch" onclick="clearDirectorySearch()" class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 text-xs font-bold cursor-pointer">×</button>
           </div>
 
-          <!-- Track Tabs (Single highlight with strict active state) -->
-          <div class="inline-flex bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-semibold select-none shadow-2xs" role="tablist" aria-label="Stream Filter">
-            <button 
-              type="button"
-              data-filter-track="all"
-              id="filterAll" 
-              class="filter-tab-btn cursor-pointer px-3.5 py-1.5 rounded-lg bg-white text-slate-900 shadow-xs font-bold border border-slate-200/50 transition-all"
-            >
-              All (14)
-            </button>
-            <button 
-              type="button"
-              data-filter-track="IT"
-              id="filterIT" 
-              class="filter-tab-btn cursor-pointer px-3.5 py-1.5 rounded-lg text-slate-500 hover:text-slate-900 font-medium transition-all"
-            >
-              IT (4)
-            </button>
-            <button 
-              type="button"
-              data-filter-track="General"
-              id="filterGeneral" 
-              class="filter-tab-btn cursor-pointer px-3.5 py-1.5 rounded-lg text-slate-500 hover:text-slate-900 font-medium transition-all"
-            >
-              General (10)
-            </button>
+          <!-- Directory Track Filters -->
+          <div class="inline-flex bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-semibold select-none shadow-2xs" role="tablist">
+            <button type="button" id="filterAll" data-filter-track="all" class="filter-tab-btn cursor-pointer px-3.5 py-1.5 rounded-lg bg-white text-slate-900 shadow-xs font-bold border border-slate-200/50 transition-all">All</button>
+            <button type="button" id="filterIT" data-filter-track="IT" class="filter-tab-btn cursor-pointer px-3.5 py-1.5 rounded-lg text-slate-500 hover:text-slate-900 font-medium transition-all">IT</button>
+            <button type="button" id="filterGeneral" data-filter-track="General" class="filter-tab-btn cursor-pointer px-3.5 py-1.5 rounded-lg text-slate-500 hover:text-slate-900 font-medium transition-all">General</button>
           </div>
         </div>
       </div>
 
-      <!-- Directory Cards Grid -->
       <div id="directoryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <!-- Rendered by JS -->
       </div>
     </section>
+    </div>
+
+    <!-- VIEW 2: SCHEDULE MATRIX (Division as Row, Dates as Column) -->
+    <div id="matrixViewWrapper" class="space-y-6 hidden">
+      <section class="bg-white rounded-3xl border border-slate-200 shadow-xs p-5 sm:p-6">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-[11px] font-bold tracking-wide uppercase px-2 py-0.5 rounded-md bg-brand-50 text-brand-700 border border-brand-200">
+                Cross-Division Matrix Table
+              </span>
+              <span class="text-xs text-slate-400 font-medium">Head Office OJT</span>
+            </div>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight mt-1">Division × Date Schedule Matrix</h2>
+            <p class="text-xs sm:text-sm text-slate-500 mt-0.5">
+              Each row represents a division, and columns represent the chronological rotation date periods. See who is placed together at a glance.
+            </p>
+          </div>
+
+          <!-- Matrix Controls: Search & Track Filter -->
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <div class="relative w-full sm:w-64">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              </div>
+              <input 
+                type="text" 
+                id="matrixSearchInput" 
+                placeholder="Filter by division or name..." 
+                oninput="handleMatrixSearch(this.value)"
+                class="w-full pl-9 pr-8 py-2 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition shadow-2xs"
+              >
+              <button id="clearMatrixSearch" onclick="clearMatrixSearch()" class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 text-xs font-bold cursor-pointer">×</button>
+            </div>
+
+            <!-- Track Filter Tabs -->
+            <div class="inline-flex bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-semibold select-none shadow-2xs" role="tablist">
+              <button 
+                type="button" 
+                id="matrixFilterAll" 
+                onclick="setMatrixTrackFilter('all')" 
+                class="cursor-pointer px-3.5 py-1.5 rounded-lg bg-white text-slate-900 shadow-xs font-bold border border-slate-200/50 transition-all"
+              >
+                All (14)
+              </button>
+              <button 
+                type="button" 
+                id="matrixFilterIT" 
+                onclick="setMatrixTrackFilter('IT')" 
+                class="cursor-pointer px-3.5 py-1.5 rounded-lg text-slate-500 hover:text-slate-900 font-medium transition-all"
+              >
+                IT (4)
+              </button>
+              <button 
+                type="button" 
+                id="matrixFilterGeneral" 
+                onclick="setMatrixTrackFilter('General')" 
+                class="cursor-pointer px-3.5 py-1.5 rounded-lg text-slate-500 hover:text-slate-900 font-medium transition-all"
+              >
+                General (10)
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Matrix Interactive Table Container -->
+      <div class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
+        <div class="p-4 sm:p-5 border-b border-slate-100 bg-slate-50/70 flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-2 text-xs text-slate-600 font-medium">
+            <span class="inline-flex items-center gap-1.5 px-2 py-0.5 bg-emerald-50 text-emerald-700 font-bold rounded-md border border-emerald-200">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span> 2+ People (Group)
+            </span>
+            <span class="inline-flex items-center gap-1.5 px-2 py-0.5 bg-slate-100 text-slate-700 font-bold rounded-md border border-slate-200">
+              <span class="w-2 h-2 rounded-full bg-slate-400"></span> 1 Person (Solo)
+            </span>
+          </div>
+          <span class="text-xs text-slate-400 font-medium">Tip: Scroll horizontally to view all date columns</span>
+        </div>
+
+        <!-- Horizontal scrollable matrix table -->
+        <div class="overflow-x-auto">
+          <table id="scheduleMatrixTable" class="w-full text-left border-collapse min-w-[1200px]">
+            <!-- Rendered by JS -->
+          </table>
+        </div>
+      </div>
+    </div>
 
   </main>
 
   <!-- Footer -->
   <footer class="bg-white border-t border-slate-200 py-6 mt-12 print:hidden">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-2">
-      <p>Talent Development Program Batch V Year 2026 • Head Office & Branch OJT Explorer</p>
-      <p class="font-mono text-[11px] text-slate-400">Branch Period: Nov 30 – Dec 11, 2026</p>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-400 flex flex-col sm:flex-row items-center justify-center gap-2">
+      <p>Talent Development Program Batch V Year 2026 • Head Office OJT Explorer</p>
     </div>
   </footer>
 
@@ -301,8 +386,8 @@
           { division: "Operation", dates: "09/11 - 11/11", start: "09/11", end: "11/11", location: "Head Office" },
           { division: "AI Strategy and Transformation", dates: "12/11 - 16/11", start: "12/11", end: "16/11", location: "Head Office" },
           { division: "IT Security", dates: "17/11 - 19/11", start: "17/11", end: "19/11", location: "Head Office" },
-          { division: "IT Operational", dates: "20/11 - 01/12", start: "20/11", end: "01/12", location: "Branches" },
-          { division: "IT Planning", dates: "02/12 - 11/12", start: "02/12", end: "11/12", location: "Branches" }
+          { division: "IT Operational", dates: "20/11 - 01/12", start: "20/11", end: "01/12", location: "Head Office" },
+          { division: "IT Planning", dates: "02/12 - 11/12", start: "02/12", end: "11/12", location: "Head Office" }
         ]
       },
       {
@@ -320,8 +405,8 @@
           { division: "Compliance", dates: "11/11 - 12/11", start: "11/11", end: "12/11", location: "Head Office" },
           { division: "Risk Management", dates: "13/11 - 16/11", start: "13/11", end: "16/11", location: "Head Office" },
           { division: "Operation", dates: "17/11 - 19/11", start: "17/11", end: "19/11", location: "Head Office" },
-          { division: "IT Planning", dates: "20/11 - 01/12", start: "20/11", end: "01/12", location: "Branches" },
-          { division: "IT Operational", dates: "02/12 - 11/12", start: "02/12", end: "11/12", location: "Branches" }
+          { division: "IT Planning", dates: "20/11 - 01/12", start: "20/11", end: "01/12", location: "Head Office" },
+          { division: "IT Operational", dates: "02/12 - 11/12", start: "02/12", end: "11/12", location: "Head Office" }
         ]
       },
       {
@@ -339,8 +424,8 @@
           { division: "Risk Management", dates: "11/11 - 12/11", start: "11/11", end: "12/11", location: "Head Office" },
           { division: "Finance", dates: "13/11 - 16/11", start: "13/11", end: "16/11", location: "Head Office" },
           { division: "Operation", dates: "17/11 - 19/11", start: "17/11", end: "19/11", location: "Head Office" },
-          { division: "IT Planning", dates: "20/11 - 01/12", start: "20/11", end: "01/12", location: "Branches" },
-          { division: "IT Operational", dates: "02/12 - 11/12", start: "02/12", end: "11/12", location: "Branches" }
+          { division: "IT Planning", dates: "20/11 - 01/12", start: "20/11", end: "01/12", location: "Head Office" },
+          { division: "IT Operational", dates: "02/12 - 11/12", start: "02/12", end: "11/12", location: "Head Office" }
         ]
       },
       {
@@ -358,8 +443,8 @@
           { division: "AI Strategy and Transformation", dates: "11/11 - 13/11", start: "11/11", end: "13/11", location: "Head Office" },
           { division: "Finance", dates: "16/11 - 17/11", start: "16/11", end: "17/11", location: "Head Office" },
           { division: "Loan Asset Management (Credam)", dates: "18/11 - 19/11", start: "18/11", end: "19/11", location: "Head Office" },
-          { division: "IT Operational", dates: "20/11 - 01/12", start: "20/11", end: "01/12", location: "Branches" },
-          { division: "IT Planning", dates: "02/12 - 11/12", start: "02/12", end: "11/12", location: "Branches" }
+          { division: "IT Operational", dates: "20/11 - 01/12", start: "20/11", end: "01/12", location: "Head Office" },
+          { division: "IT Planning", dates: "02/12 - 11/12", start: "02/12", end: "11/12", location: "Head Office" }
         ]
       },
 
@@ -576,31 +661,77 @@
     };
 
     // State Variables
+    let currentPrimaryView = "person"; // 'person' | 'matrix'
     let currentSelectedPersonId = "it-1";
     let directorySearchTerm = "";
     let directoryFilterTrack = "all";
+    
+    // Matrix view state
+    let matrixSearchTerm = "";
+    let matrixFilterTrack = "all";
 
     /* -------------------------------------------------------------------------
-       AVATAR RENDERING ENGINE WITH POPUP TRIGGER
-       - Clicking any avatar opens the profile popup modal
+       PRIMARY VIEW SWITCHER (By Person vs Schedule Matrix)
     ------------------------------------------------------------------------- */
-    function renderAvatar(person, sizeClass = "w-11 h-11", textSize = "text-sm", roundedClass = "rounded-2xl", clickable = true) {
+    function switchPrimaryView(view) {
+      currentPrimaryView = view;
+      const personWrapper = document.getElementById("personViewWrapper");
+      const matrixWrapper = document.getElementById("matrixViewWrapper");
+      
+      const tabPerson = document.getElementById("viewTabPerson");
+      const tabMatrix = document.getElementById("viewTabMatrix");
+      const copyBtn = document.getElementById("copySummaryBtn");
+
+      // Reset views
+      personWrapper.classList.add("hidden");
+      matrixWrapper.classList.add("hidden");
+
+      // Reset tab styling
+      [tabPerson, tabMatrix].forEach(t => {
+        t.className = "cursor-pointer px-3.5 py-1.5 rounded-lg text-slate-500 hover:text-slate-900 font-medium transition flex items-center gap-1.5 bg-transparent border-transparent shadow-none";
+        const icon = t.querySelector("svg");
+        if (icon) icon.className = "w-3.5 h-3.5 text-slate-400";
+      });
+
+      if (view === "matrix") {
+        matrixWrapper.classList.remove("hidden");
+        tabMatrix.className = "cursor-pointer px-3.5 py-1.5 rounded-lg bg-white text-slate-900 shadow-xs font-bold border border-slate-200/60 transition flex items-center gap-1.5";
+        tabMatrix.querySelector("svg").className = "w-3.5 h-3.5 text-brand-600";
+        copyBtn.classList.add("hidden");
+        renderMatrixView();
+      } else {
+        personWrapper.classList.remove("hidden");
+        tabPerson.className = "cursor-pointer px-3.5 py-1.5 rounded-lg bg-white text-slate-900 shadow-xs font-bold border border-slate-200/60 transition flex items-center gap-1.5";
+        tabPerson.querySelector("svg").className = "w-3.5 h-3.5 text-brand-600";
+        copyBtn.classList.remove("hidden");
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function viewPersonTimelineFromMatrix(personId) {
+      switchPrimaryView('person');
+      selectPerson(personId);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* -------------------------------------------------------------------------
+       AVATAR RENDERING ENGINE
+    ------------------------------------------------------------------------- */
+    function renderAvatar(person, sizeClass = "w-10 h-10", textSize = "text-xs", roundedClass = "rounded-2xl", clickable = true) {
       const gradientClass = person.stream === 'IT' 
         ? "bg-gradient-to-tr from-indigo-700 via-indigo-600 to-indigo-500 text-white" 
         : "bg-gradient-to-tr from-emerald-700 via-emerald-600 to-teal-500 text-white";
 
-      const clickHandler = clickable 
-        ? `onclick="event.stopPropagation(); openAvatarModal('${person.id}')"` 
-        : "";
-      const cursorClass = clickable ? "cursor-pointer hover:scale-105 active:scale-95 transition-transform" : "";
+      const clickHandler = clickable ? `onclick="event.stopPropagation(); openAvatarModal('${person.id}')"` : "";
+      const cursorClass = clickable ? "cursor-pointer hover:ring-2 hover:ring-brand-400 hover:scale-105 transition-transform" : "";
 
       if (person.avatar) {
         return `
-          <div ${clickHandler} class="${sizeClass} ${roundedClass} ${cursorClass} overflow-hidden bg-slate-100 flex items-center justify-center shrink-0 border border-slate-200 shadow-2xs" title="Click to view ${person.name}'s profile photo">
+          <div ${clickHandler} class="${sizeClass} ${roundedClass} overflow-hidden bg-slate-100 ${cursorClass} border border-slate-200/80 shrink-0 shadow-2xs select-none" title="Click to view ${person.name}'s photo & profile">
             <img 
               src="${person.avatar}" 
               alt="${person.name}" 
-              class="w-full h-full object-cover" 
+              class="w-full h-full object-cover"
               onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'w-full h-full ${gradientClass} flex items-center justify-center font-bold ${textSize}\\'>${person.initials}</div>';"
             />
           </div>
@@ -741,6 +872,24 @@
       return divName.trim();
     }
 
+    // Convert DD/MM string (year 2026) to standard Date object
+    function parseDateToDateObject(dStr) {
+      const parts = dStr.trim().split('/');
+      if (parts.length < 2) return null;
+      const day = parseInt(parts[0], 10);
+      const month = parseInt(parts[1], 10) - 1; // 0-indexed
+      return new Date(2026, month, day);
+    }
+
+    // Check if target Date object falls inside a range string like "28/10 - 03/11"
+    function isDateInsideRange(targetDate, dateRangeStr) {
+      const [startStr, endStr] = dateRangeStr.split('-').map(s => s.trim());
+      const startDate = parseDateToDateObject(startStr);
+      const endDate = parseDateToDateObject(endStr);
+      if (!startDate || !endDate) return false;
+      return targetDate >= startDate && targetDate <= endDate;
+    }
+
     function parseDateToNumber(dStr) {
       const parts = dStr.trim().split('/');
       if (parts.length < 2) return 0;
@@ -777,6 +926,221 @@
         });
       });
       return teammates;
+    }
+
+    function getShortName(fullName) {
+      const parts = fullName.trim().split(" ");
+      if (parts.length > 1 && parts[0].toLowerCase() === "muhammad") {
+        return parts[1];
+      }
+      return parts[0];
+    }
+
+    /* -------------------------------------------------------------------------
+       SCHEDULE MATRIX CONTROLLER (Row = Division, Column = Dates)
+    ------------------------------------------------------------------------- */
+    function handleMatrixSearch(val) {
+      matrixSearchTerm = val.trim().toLowerCase();
+      const clearBtn = document.getElementById("clearMatrixSearch");
+      if (matrixSearchTerm) {
+        clearBtn.classList.remove("hidden");
+      } else {
+        clearBtn.classList.add("hidden");
+      }
+      renderMatrixView();
+    }
+
+    function clearMatrixSearch() {
+      document.getElementById("matrixSearchInput").value = "";
+      matrixSearchTerm = "";
+      document.getElementById("clearMatrixSearch").classList.add("hidden");
+      renderMatrixView();
+    }
+
+    function setMatrixTrackFilter(track) {
+      matrixFilterTrack = track;
+      const tabConfigs = [
+        { key: 'all', id: 'matrixFilterAll' },
+        { key: 'IT', id: 'matrixFilterIT' },
+        { key: 'General', id: 'matrixFilterGeneral' }
+      ];
+
+      tabConfigs.forEach(t => {
+        const btn = document.getElementById(t.id);
+        if (!btn) return;
+        if (t.key === track) {
+          btn.className = "cursor-pointer px-3.5 py-1.5 rounded-lg bg-white text-slate-900 shadow-xs font-bold border border-slate-200/50 transition-all";
+        } else {
+          btn.className = "cursor-pointer px-3.5 py-1.5 rounded-lg text-slate-500 hover:text-slate-900 font-medium transition-all bg-transparent border-transparent shadow-none";
+        }
+      });
+
+      renderMatrixView();
+    }
+
+    function renderMatrixView() {
+      const table = document.getElementById("scheduleMatrixTable");
+      if (!table) return;
+
+      // 1. Gather all unique date ranges that exist across participants
+      const dateSet = new Set();
+      ALL_PARTICIPANTS.forEach(person => {
+        if (matrixFilterTrack !== 'all' && person.stream !== matrixFilterTrack) return;
+        person.rotations.forEach(r => {
+          dateSet.add(r.dates);
+        });
+      });
+
+      // Sort date columns chronologically by start date
+      const sortedDates = Array.from(dateSet).sort((a, b) => {
+        const startA = a.split('-')[0].trim();
+        const startB = b.split('-')[0].trim();
+        return parseDateToNumber(startA) - parseDateToNumber(startB);
+      });
+
+      // 2. Identify all unique divisions in their logical order
+      const divisionsList = [
+        "Credit Review",
+        "Loan Asset Management",
+        "Loan Asset Management (Credam)",
+        "AI Division",
+        "AI Strategy and Transformation",
+        "Compliance",
+        "Risk Management",
+        "Finance",
+        "Legal",
+        "Retail Credit and Digital Strategy",
+        "Retail Business Development",
+        "Operation",
+        "IT Security",
+        "IT Operational",
+        "IT Planning"
+      ];
+
+      // Filter divisions by search term if provided
+      let filteredDivisions = divisionsList.filter(div => {
+        if (matrixSearchTerm) {
+          const divMatch = div.toLowerCase().includes(matrixSearchTerm);
+          // Check if any person in this division matches search
+          const personMatch = ALL_PARTICIPANTS.some(p => {
+            const matchesQuery = p.name.toLowerCase().includes(matrixSearchTerm) || p.nik.includes(matrixSearchTerm);
+            const inDiv = p.rotations.some(r => r.division === div);
+            return matchesQuery && inDiv;
+          });
+          return divMatch || personMatch;
+        }
+        return true;
+      });
+
+      // Build Table Header (Row 1: Divisions Header + Each Date as a Column)
+      let theadHtml = `
+        <thead>
+          <tr class="bg-slate-100/80 border-b border-slate-200 text-xs font-bold text-slate-700">
+            <th class="p-4 sticky left-0 z-20 bg-slate-100 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.06)] min-w-[240px] uppercase tracking-wider text-slate-500">
+              Division / Department
+            </th>
+      `;
+
+      sortedDates.forEach(date => {
+        theadHtml += `
+          <th class="p-3.5 text-center min-w-[170px] border-l border-slate-200/70 font-mono tracking-tight text-slate-800">
+            <span class="block text-[11px] font-bold">${date}</span>
+          </th>
+        `;
+      });
+      theadHtml += `</tr></thead>`;
+
+      // Build Table Body (Each row is a division)
+      let tbodyHtml = `<tbody class="divide-y divide-slate-100 text-xs">`;
+
+      filteredDivisions.forEach((divName, rowIdx) => {
+        const cfg = DIVISION_CONFIG[divName] || { icon: "🏢" };
+
+        tbodyHtml += `
+          <tr class="hover:bg-slate-50/70 transition-colors">
+            <!-- Sticky Division Header Column -->
+            <td class="p-4 sticky left-0 z-10 bg-white group-hover:bg-slate-50 transition shadow-[2px_0_5px_-2px_rgba(0,0,0,0.06)] border-r border-slate-200">
+              <div class="flex items-center space-x-2.5">
+                <span class="text-xl shrink-0">${cfg.icon}</span>
+                <div class="truncate">
+                  <span class="font-extrabold text-slate-900 block truncate text-xs sm:text-sm leading-tight">${divName}</span>
+                  <span class="text-[10px] font-semibold text-slate-400 block mt-0.5">
+                    📍 Head Office
+                  </span>
+                </div>
+              </div>
+            </td>
+        `;
+
+        // Generate cells for each date column
+        sortedDates.forEach(dateStr => {
+          // Find participants assigned to this division on this exact date range
+          const occupants = [];
+
+          ALL_PARTICIPANTS.forEach(person => {
+            if (matrixFilterTrack !== 'all' && person.stream !== matrixFilterTrack) return;
+
+            person.rotations.forEach(r => {
+              if (r.division === divName && r.dates === dateStr) {
+                occupants.push(person);
+              }
+            });
+          });
+
+          if (occupants.length === 0) {
+            tbodyHtml += `
+              <td class="p-2 border-l border-slate-100 text-center bg-slate-50/20">
+                <span class="text-slate-300 font-mono select-none text-[11px]">—</span>
+              </td>
+            `;
+          } else {
+            const isGroup = occupants.length > 1;
+            const cardBg = isGroup 
+              ? 'bg-emerald-50/80 border-emerald-200/90 text-emerald-950' 
+              : 'bg-indigo-50/70 border-indigo-200/80 text-indigo-950';
+
+            const occupantTags = occupants.map(p => {
+              const avatar = renderAvatar(p, "w-5 h-5", "text-[8px]", "rounded-full", true);
+              const shortName = getShortName(p.name);
+              const r = p.rotations.find(rot => rot.division === divName && rot.dates === dateStr);
+              return `
+                <div 
+                  onclick="viewPersonTimelineFromMatrix('${p.id}')"
+                  class="cursor-pointer flex items-center justify-between gap-1 p-1 rounded-lg bg-white/90 hover:bg-white border border-slate-200/80 hover:border-brand-400 hover:shadow-2xs transition"
+                  title="${p.name} (${p.stream})"
+                >
+                  <div class="flex items-center space-x-1.5 truncate">
+                    ${avatar}
+                    <span class="font-bold text-[11px] text-slate-800 truncate">${shortName} <span class="font-medium text-slate-500 text-[9px]">(${r.dates})</span></span>
+                  </div>
+                  <span class="text-[8px] font-extrabold px-1 rounded ${p.stream === 'IT' ? 'bg-indigo-100 text-indigo-700' : 'bg-emerald-100 text-emerald-700'} shrink-0">${p.stream}</span>
+                </div>
+              `;
+            }).join("");
+
+            tbodyHtml += `
+              <td class="p-2 border-l border-slate-200/70 align-top">
+                <div class="rounded-xl border p-2 space-y-1.5 ${cardBg} shadow-2xs">
+                  <div class="flex items-center justify-between text-[10px] font-bold">
+                    <span class="${isGroup ? 'text-emerald-700' : 'text-indigo-700'}">
+                      ${occupants.length} ${isGroup ? 'Group' : 'Solo'}
+                    </span>
+                    <span class="text-slate-400 font-mono text-[9px]">${isGroup ? '👥' : '👤'}</span>
+                  </div>
+                  <div class="space-y-1">
+                    ${occupantTags}
+                  </div>
+                </div>
+              </td>
+            `;
+          }
+        });
+
+        tbodyHtml += `</tr>`;
+      });
+
+      tbodyHtml += `</tbody>`;
+      table.innerHTML = theadHtml + tbodyHtml;
     }
 
     /* -------------------------------------------------------------------------
