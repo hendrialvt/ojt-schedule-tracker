@@ -331,8 +331,8 @@
       </section>
 
       <!-- Matrix Interactive Table Container -->
-      <div class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
-        <div class="p-4 sm:p-5 border-b border-slate-100 bg-slate-50/70 flex flex-wrap items-center justify-between gap-3">
+      <div class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden flex flex-col">
+        <div class="p-4 sm:p-5 border-b border-slate-100 bg-slate-50/70 flex flex-wrap items-center justify-between gap-3 shrink-0">
           <div class="flex items-center gap-2 text-xs text-slate-600 font-medium">
             <span class="inline-flex items-center gap-1.5 px-2 py-0.5 bg-emerald-50 text-emerald-700 font-bold rounded-md border border-emerald-200">
               <span class="w-2 h-2 rounded-full bg-emerald-500"></span> 2+ People (Group)
@@ -344,26 +344,18 @@
               <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span> Active Now
             </span>
           </div>
-          <span class="text-xs text-slate-400 font-medium">Tip: Scroll horizontally to view the full timeline</span>
+          <span class="text-xs text-slate-400 font-medium">Tip: Scroll horizontally or drag to view the full timeline</span>
         </div>
 
-        <!-- Horizontal scrollable Gantt matrix -->
-        <div class="overflow-x-auto relative">
-          <div id="scheduleMatrixTable" class="w-full text-left min-w-[1200px] flex flex-col">
-            <!-- Rendered by JS -->
-          </div>
-        </div>
-      </div>
-    </div>
         <!-- Horizontal & Vertical scrollable Gantt matrix -->
-        <div id="matrixScrollContainer" class="overflow-auto relative max-h-[70vh] cursor-grab rounded-b-3xl w-full">
+        <div id="matrixScrollContainer" class="overflow-auto relative max-h-[70vh] cursor-grab rounded-b-3xl w-full bg-slate-50/20">
           <div id="scheduleMatrixTable" class="w-full text-left min-w-[2400px] flex flex-col relative select-none">
             <!-- Rendered by JS -->
           </div>
         </div>
       </div>
     </div>
-  </footer>
+  </main>
 
   <!-- Complete Application Data & Script -->
   <script>
@@ -1279,11 +1271,18 @@
       bodyHtml += `</div>`;
       container.innerHTML = headerHtml + bodyHtml;
 
-      // Auto-scroll to active Gantt block horizontally
+      // Auto-scroll horizontally inside the container only (prevents page jump)
       setTimeout(() => {
         const activeBlock = document.getElementById("active-gantt-block");
-        if(activeBlock) {
-          activeBlock.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        const scrollContainer = document.getElementById("matrixScrollContainer");
+        if(activeBlock && scrollContainer) {
+          const blockLeft = activeBlock.offsetLeft;
+          const containerWidth = scrollContainer.clientWidth;
+          const blockWidth = activeBlock.clientWidth;
+          scrollContainer.scrollTo({ 
+            left: blockLeft - (containerWidth / 2) + (blockWidth / 2), 
+            behavior: 'smooth' 
+          });
         }
       }, 300);
     }
@@ -1294,7 +1293,7 @@
     document.addEventListener("DOMContentLoaded", () => {
       buildCandidateDropdown();
       setupTrackFilterTabs();
-      selectPerson(currentSelectedPersonId);
+      selectPerson(currentSelectedPersonId, false); // Disabled auto-scroll on initial load
       renderDirectory();
       setupDragToScroll();
     });
@@ -1428,7 +1427,7 @@
     /* -------------------------------------------------------------------------
        SPOTLIGHT VIEW CONTROLLER
     ------------------------------------------------------------------------- */
-    function selectPerson(personId) {
+    function selectPerson(personId, autoScroll = true) {
       currentSelectedPersonId = personId;
       document.getElementById("personDropdown").value = personId;
 
@@ -1543,11 +1542,13 @@
 
       renderDirectory();
 
-      // Auto-scroll to active rotation timeline item
-      setTimeout(() => {
-        const activeTimelineItem = document.getElementById("active-timeline-item");
-        if(activeTimelineItem) activeTimelineItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 300);
+      // Auto-scroll to active rotation timeline item (only if manually selected)
+      if (autoScroll) {
+        setTimeout(() => {
+          const activeTimelineItem = document.getElementById("active-timeline-item");
+          if(activeTimelineItem) activeTimelineItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 300);
+      }
     }
 
     /* -------------------------------------------------------------------------
